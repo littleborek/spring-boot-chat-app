@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+    <div id="auth-container">
+        <div class="auth-wrapper">
+            <div class="form-container" id="login-form-container">
+                <form id="loginForm">
+                    <h1>Giriş Yap</h1>
+                    <div class="input-box">
+                        <input type="text" id="login-username" placeholder="Kullanıcı Adı" required>
+                        <i class='bx bxs-user'></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="login-password" placeholder="Şifre" required>
+                        <i class='bx bxs-lock-alt'></i>
+                    </div>
+                    <p id="login-error" class="error-message"></p>
+                    <button type="submit" class="btn">Giriş Yap</button>
+                    <div class="register-link">
+                        <p>Hesabın yok mu? <a href="#" id="show-signup">Kayıt Ol</a></p>
+                    </div>
+                </form>
+            </div>
+            <div class="form-container hidden" id="signup-form-container">
+                <form id="signupForm">
+                    <h1>Hesap Oluştur</h1>
+                    <div class="input-box">
+                        <input type="text" id="signup-username" placeholder="Kullanıcı Adı" required>
+                        <i class='bx bxs-user'></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="signup-password" placeholder="Şifre" required>
+                        <i class='bx bxs-lock-alt'></i>
+                    </div>
+                    <p id="signup-error" class="error-message"></p>
+                    <button type="submit" class="btn">Kayıt Ol</button>
+                    <div class="register-link">
+                        <p>Zaten hesabın var mı? <a href="#" id="show-login">Giriş Yap</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-view" class="hidden">
+        <div class="chat-main-container">
+            <div class="rooms-panel">
+                <div class="rooms-header">
+                    <div class="user-profile">
+                        <i class='bx bxs-user-circle'></i>
+                        <h3 id="username-display"></h3>
+                    </div>
+                    <button id="logout-button" title="Çıkış Yap"><i class='bx bx-log-out'></i></button>
+                </div>
+                <h4>SOHBET ODALARI</h4>
+                <ul id="room-list"></ul>
+                <form id="new-room-form">
+                    <input type="text" id="new-room-name" placeholder="Yeni oda oluştur..." required/>
+                    <button type="submit"><i class='bx bx-plus'></i></button>
+                </form>
+            </div>
+
+            <div class="messages-panel">
+                <div id="welcome-screen">
+                    <i class='bx bxs-message-rounded-dots'></i>
+                    <h2>Sohbete Hoş Geldin!</h2>
+                    <p>Başlamak için sol menüden bir oda seç veya yeni bir oda oluştur.</p>
+                </div>
+                <div id="chat-screen" class="hidden">
+                    <div class="messages-header">
+                        <h3 id="room-title"></h3>
+                    </div>
+                    <ul id="messageArea"></ul>
+                    <form id="messageForm">
+                        <input type="text" id="messageInput" placeholder="Mesajını yaz..." autocomplete="off"/>
+                        <button type="submit"><i class='bx bxs-send'></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+	<script src="/js/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

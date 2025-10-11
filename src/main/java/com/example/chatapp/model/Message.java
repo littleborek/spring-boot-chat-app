@@ -33,8 +33,22 @@ public class Message {
 
     @ManyToOne
     private User user;
+    
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false) 
+    private ChatRoom room;
+    
+    
 
     // Getter & Setter
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+    
+    public ChatRoom getRoom() {
+        return room;
+    }
+
+    public void setRoom(ChatRoom room) {
+        this.room = room;
+    }
 }
