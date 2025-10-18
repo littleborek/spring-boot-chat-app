@@ -23,14 +23,15 @@ public class MessageController {
     @GetMapping("/rooms/{roomId}/messages")
     public List<MessageDTO> getMessagesForRoom(@PathVariable Long roomId) {
         List<Message> messages = messageRepository.findAllByRoomIdOrderByTimestampAsc(roomId);
-        
 
         return messages.stream().map(message -> {
             MessageDTO dto = new MessageDTO();
             dto.setUsername(message.getUser().getUsername());
             dto.setContent(message.getContent());
             dto.setTimestamp(message.getTimestamp());
+            dto.setMessageId(message.getId()); 
             return dto;
         }).collect(Collectors.toList());
     }
+    
 }

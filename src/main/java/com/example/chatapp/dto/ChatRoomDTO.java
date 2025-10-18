@@ -9,7 +9,7 @@ public class ChatRoomDTO {
         this.name = name;
     }
 
-    // Getter ve Setter'lar
+    // Getter Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

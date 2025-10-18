@@ -251,3 +251,70 @@ body {
 .message-bubble.sender .message-header {
     justify-content: flex-end;
 }
+
+
+/* =================================
+   MESSAGE ACTION BUTTONS
+   ================================= */
+
+.message-actions {
+    position: absolute;
+    top: -10px;       
+    display: none;      
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    padding: 2px 4px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.message-bubble.sender .message-actions {
+    right: 5px; 
+}
+
+
+.message-bubble:hover .message-actions {
+    display: flex; 
+    gap: 5px;
+}
+
+.message-actions button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+}
+.message-actions button:hover {
+    color: #ddd;
+}
+
+
+.message-bubble {
+    position: relative;
+}
+
+.messages-header {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+}
+
+#create-invite-button {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--secondary-color);
+    padding: 5px;
+}
+#create-invite-button:hover { color: var(--primary-color); }
+
+
+#join-room-form {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    background-color: #f1f1f1; 
+#invite-code-input { flex-grow: 1; border: 1px solid var(--border-color); padding: 8px; border-radius: 5px; }
+#join-room-form button { width: 60px; margin-left: 10px; border: none; background-color: var(--success-color); color: #fff; border-radius: 5px; cursor: pointer; }

@@ -1,7 +1,15 @@
 package com.example.chatapp.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -14,13 +22,44 @@ public class User {
 
     private String password;
 
-    // Getter & Setter
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Membership> memberships = new HashSet<>();
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+
+    @ManyToMany
+    @JoinTable(
+      name = "friendships", 
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    private Set<User> friends = new HashSet<>();
+
+
+    @ManyToMany(mappedBy = "friends")
+    private Set<User> friendedBy = new HashSet<>();
+
+
+
+    public Set<Membership> getMemberships() { return memberships; }
+    public void setMemberships(Set<Membership> memberships) { this.memberships = memberships; }
+    public Set<User> getFriends() { return friends; }
+    public void setFriends(Set<User> friends) { this.friends = friends; }
+    public Set<User> getFriendedBy() { return friendedBy; }
+    public void setFriendedBy(Set<User> friendedBy) { this.friendedBy = friendedBy; }
+
+
+    public void addFriend(User friend) {
+        friends.add(friend);
+        friend.getFriendedBy().add(this); 
+    }
+
+    public void removeFriend(User friend) {
+        friends.remove(friend);
+        friend.getFriendedBy().remove(this);
+    }
+    
 }
+
+

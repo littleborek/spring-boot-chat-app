@@ -1,7 +1,15 @@
 package com.example.chatapp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.HashSet;
 import java.util.Set;
+
+
+@Getter
+@Setter
 
 @Entity
 @Table(name = "chat_rooms")
@@ -19,27 +27,25 @@ public class ChatRoom {
     private Set<Message> messages;
 
 
-    public Long getId() {
-        return id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true) // db
+    private Set<Membership> memberships = new HashSet<>();
+
+
+
+   
+    public void addMember(User user, Membership.MemberRole role) {
+        Membership membership = new Membership(user, this, role);
+        memberships.add(membership);
+        // user.getMemberships().add(membership);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(Set<Message> messages) {
-        this.messages = messages;
+    public void removeMember(User user) {
+        memberships.removeIf(membership -> membership.getUser().equals(user));
     }
 }

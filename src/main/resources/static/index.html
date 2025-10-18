@@ -55,19 +55,24 @@
 
     <div id="chat-view" class="hidden">
         <div class="chat-main-container">
+
             <div class="rooms-panel">
                 <div class="rooms-header">
                     <div class="user-profile">
                         <i class='bx bxs-user-circle'></i>
-                        <h3 id="username-display"></h3>
-                    </div>
+                        <h3 id="username-display"></h3> </div>
                     <button id="logout-button" title="Çıkış Yap"><i class='bx bx-log-out'></i></button>
                 </div>
                 <h4>SOHBET ODALARI</h4>
-                <ul id="room-list"></ul>
+                <ul id="room-list">
+                    </ul>
                 <form id="new-room-form">
                     <input type="text" id="new-room-name" placeholder="Yeni oda oluştur..." required/>
                     <button type="submit"><i class='bx bx-plus'></i></button>
+                </form>
+                <form id="join-room-form">
+                    <input type="text" id="invite-code-input" placeholder="Davet Kodu..." required/>
+                    <button type="submit">Katıl</button>
                 </form>
             </div>
 
@@ -79,22 +84,17 @@
                 </div>
                 <div id="chat-screen" class="hidden">
                     <div class="messages-header">
-                        <h3 id="room-title"></h3>
-                    </div>
-                    <ul id="messageArea"></ul>
+                        <h3 id="room-title"></h3> <button id="create-invite-button" class="hidden" title="Davet Kodu Oluştur"><i class='bx bx-link-alt'></i></button>
+                        </div>
+                    <ul id="messageArea">
+                        </ul>
                     <form id="messageForm">
                         <input type="text" id="messageInput" placeholder="Mesajını yaz..." autocomplete="off"/>
                         <button type="submit"><i class='bx bxs-send'></i></button>
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-	<script src="/js/app.js"></script>
+                </div> </div> </div> </div> <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="/js/app.js"></script>
+
 </body>
 </html>

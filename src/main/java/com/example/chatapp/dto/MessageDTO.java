@@ -11,6 +11,16 @@ public class MessageDTO {
     private String content;
     private LocalDateTime timestamp;  
     private String username; 
+    private Long messageId;
+    
+    
+    public Long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Long messageId) {
+        this.messageId = messageId;
+    }
 
 
     public String getContent() { return content; }
