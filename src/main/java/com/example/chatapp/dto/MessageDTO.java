@@ -7,7 +7,7 @@ import java.util.UUID;
 public record MessageDTO(
     Long id,
     UUID channelId,
-    userDTO author,
+    UserDTO author,
     String content,
     LocalDateTime createdAt,
     LocalDateTime editedAt,
