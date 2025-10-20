@@ -1,0 +1,53 @@
+package com.example.chatapp.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import lombok.Data;
+
+
+@Data
+@Entity
+@Table(name = "messages")
+public class Message {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "channel_id", nullable = false)
+    private Channel channel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
+
+    @Column(columnDefinition = "text")
+    private String context;
+
+    @Column(columnDefinition = "jsonb")
+    private String contentMeta;
+
+    private LocalDateTime createdAt;
+    
+    private LocalDateTime editedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reply_to_message_id")
+    private Message replyToMessage;
+
+    // --- İlişkiler ---
+    
+    @OneToMany(mappedBy = "replyToMessage")
+    private Set<Message> replies;
+
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Attachment> attachments;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+}
