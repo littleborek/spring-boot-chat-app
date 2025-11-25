@@ -27,7 +27,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String passwordHash;
+    private String password;
 
     private String avatarUrl;
 
@@ -36,6 +36,7 @@ public class User {
     private LocalDateTime lastActiveAt;
 
     @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String profileMeta;
 
     // Relastionships
@@ -49,7 +50,7 @@ public class User {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private Set<Message> messages;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Presence presence;
 
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)

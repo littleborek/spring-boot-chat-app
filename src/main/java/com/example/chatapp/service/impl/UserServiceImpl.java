@@ -2,8 +2,12 @@
 package com.example.chatapp.service.impl;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -21,7 +25,7 @@ import com.example.chatapp.service.UserService;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
    
 
@@ -34,7 +38,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Email already in use!");
         }
 
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -52,8 +56,21 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-    
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username)
+                .or(() -> userRepository.findByUsername(username))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + username));
+        
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                new ArrayList<>() // You can add authorities/roles here if needed
+        );
     }
+    
+}
 
 
 
