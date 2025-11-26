@@ -1,32 +1,18 @@
 package com.example.chatapp.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
-@Getter
-@Setter
-public class MessageDTO {
-    private String content;
-    private LocalDateTime timestamp;  
-    private String username; 
-    private Long messageId;
+public record MessageDTO(
+    Long id,
+    UUID channelId,
+    UserDTO author,
+    String content,
+    LocalDateTime createdAt,
+    LocalDateTime editedAt,
+    Long replyToMessageId,
+    List<AttachmentDTO> attachments
+) {
     
-    
-    public Long getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(Long messageId) {
-        this.messageId = messageId;
-    }
-
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }
-

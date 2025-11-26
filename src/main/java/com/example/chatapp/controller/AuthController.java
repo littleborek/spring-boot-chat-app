@@ -1,61 +1,63 @@
-package com.example.chatapp.controller;
 
-import com.example.chatapp.dto.JwtResponse;
-import com.example.chatapp.dto.LoginRequest;
-import com.example.chatapp.dto.SignupRequest;
-import com.example.chatapp.model.User;
-import com.example.chatapp.repository.UserRepository;
-import com.example.chatapp.security.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+package com.example.chatapp.controller;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.chatapp.dto.AuthenticationRequest;
+import com.example.chatapp.dto.AuthenticationResponse;
+import com.example.chatapp.dto.CreateUserRequest;
+import com.example.chatapp.dto.UserDTO;
+import com.example.chatapp.entity.User;
+import com.example.chatapp.repository.UserRepository;
+import com.example.chatapp.security.JwtUtil;
+import com.example.chatapp.service.UserService;
+
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        
+            );
+            System.out.println("auth valid");
 
-        return ResponseEntity.ok(new JwtResponse(jwt, loginRequest.getUsername()));
+            User user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            String token = jwtUtil.generateToken(user);
+            return ResponseEntity.ok(new AuthenticationResponse(token));
+
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(401).build();
+        }
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
-        if (userRepository.findByUsername(signUpRequest.getUsername()) != null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error: Username is already taken!");
-        }
-
-        User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
-        userRepository.save(user);
-
-        return ResponseEntity.ok("User registered successfully!");
+    // ✅ Kullanıcı kaydı
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> register(@RequestBody CreateUserRequest request) {
+        User user = User.builder()
+                .username(request.username())
+                .email(request.email())
+                .password(request.password())
+                .build();
+        
+        User saved = userService.register(user);
+        
+        UserDTO userDTO = new UserDTO(saved.getId(), saved.getUsername(), saved.getAvatarUrl());
+        return ResponseEntity.ok(userDTO);
     }
 }
