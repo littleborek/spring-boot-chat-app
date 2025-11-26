@@ -8,7 +8,8 @@ public record ChannelDTO(
     UUID id,
     UUID serverId,
     String name,
-    ChannelType type
+    ChannelType type,
+    String settings
 ) {
     
 }

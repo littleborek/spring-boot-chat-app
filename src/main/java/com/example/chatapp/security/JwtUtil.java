@@ -45,4 +45,17 @@ public class JwtUtil {
             return false;
         }
     }
+
+    public String extractUsername(String token) {
+        return getUsernameFromToken(token);
+    }
+
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("username", String.class);
+    }
 }

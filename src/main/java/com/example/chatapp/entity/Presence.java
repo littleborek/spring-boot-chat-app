@@ -30,7 +30,10 @@ public class Presence {
     private PresenceStatus status;
 
     private LocalDateTime lastSeen;
+    
+    private LocalDateTime lastActiveAt;
 
     @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String clientInfo;
 }
