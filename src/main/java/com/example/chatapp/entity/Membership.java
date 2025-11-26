@@ -1,6 +1,7 @@
 package com.example.chatapp.entity;
 
 
+import com.example.chatapp.enums.MembershipRole;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -27,7 +28,15 @@ public class Membership {
 
     private LocalDateTime joinedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MembershipRole role;
+
     private String nickname;
+    
+    @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+    private String settings;
     
     @PrePersist
     protected void onJoin() {

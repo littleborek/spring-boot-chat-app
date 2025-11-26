@@ -28,6 +28,7 @@ public class Server {
     private LocalDateTime createdAt;
 
     @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String settings;
     
     //Relationships

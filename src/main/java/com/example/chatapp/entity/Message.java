@@ -28,6 +28,7 @@ public class Message {
     private String context;
 
     @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String contentMeta;
 
     private LocalDateTime createdAt;

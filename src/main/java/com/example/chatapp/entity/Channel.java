@@ -30,6 +30,7 @@ public class Channel {
     private ChannelType type;
 
     @Column(columnDefinition = "jsonb")
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String settings;
 
     // --- İlişkiler ---

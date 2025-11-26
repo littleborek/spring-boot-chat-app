@@ -1,7 +1,11 @@
 package com.example.chatapp.dto;
 
+import java.util.UUID;
+
 public record CreateMessageRequest(
-      String context,
+      UUID channelId,
+      String content,
+      String type,
       Long replyToMessageId
 ) {
   

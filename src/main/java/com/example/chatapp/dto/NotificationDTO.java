@@ -7,7 +7,8 @@ import com.example.chatapp.enums.NotificationType;
 
 public record NotificationDTO(
     UUID id,
-    UserDTO sender,
+    UUID recipientId,
+    UUID senderId,
     NotificationType type,
     Long messageId,
     UUID channelId,
