@@ -5,10 +5,14 @@ import com.example.chatapp.enums.MembershipRole;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "memberships", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "server_id"})
 })
@@ -31,6 +35,8 @@ public class Membership {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MembershipRole role;
+    
+    private LocalDateTime mutedUntil;
 
     private String nickname;
     

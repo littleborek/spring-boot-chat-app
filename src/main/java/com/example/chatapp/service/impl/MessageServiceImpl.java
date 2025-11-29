@@ -4,6 +4,7 @@ import com.example.chatapp.dto.CreateMessageRequest;
 import com.example.chatapp.dto.MessageDTO;
 import com.example.chatapp.dto.UserDTO;
 import com.example.chatapp.entity.Channel;
+import com.example.chatapp.entity.Membership;
 import com.example.chatapp.entity.Message;
 import com.example.chatapp.entity.User;
 import com.example.chatapp.exception.BadRequestException;
@@ -56,13 +57,17 @@ public class MessageServiceImpl implements MessageService {
         Channel channel = channelRepository.findById(request.channelId())
                 .orElseThrow(() -> new BadRequestException("Channel not found"));
         
-        // Check if user is member of the server
         if (channel.getServer() != null) {
-            boolean isMember = membershipRepository.existsByUserAndServer(author, channel.getServer());
-            if (!isMember) {
-                throw new BadRequestException("User is not a member of this server");
+
+            Membership membership = membershipRepository.findByUserAndServer(author, channel.getServer())
+                    .orElseThrow(() -> new BadRequestException("User is not a member of this server"));
+
+            if (membership.getMutedUntil() != null && membership.getMutedUntil().isAfter(LocalDateTime.now())) {
+                log.warn("User {} tried to message but is muted until {}", author.getUsername(), membership.getMutedUntil());
+                throw new BadRequestException("You are muted in this server until: " + membership.getMutedUntil());
             }
         }
+
         
         // Use Factory Pattern to create message
         String messageType = request.type() != null ? request.type() : "TEXT";
@@ -83,13 +88,13 @@ public class MessageServiceImpl implements MessageService {
         return convertToDTO(message);
     }
     
+    
     @Override
     @Transactional
     public MessageDTO updateMessage(Long messageId, String newContent, UUID userId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new BadRequestException("Message not found"));
         
-        // Check if user is the author
         if (!message.getAuthor().getId().equals(userId)) {
             throw new BadRequestException("Only the author can edit this message");
         }
@@ -98,7 +103,6 @@ public class MessageServiceImpl implements MessageService {
         message.setEditedAt(LocalDateTime.now());
         message = messageRepository.save(message);
         
-        // Notify observers
         messageSubject.notifyMessageUpdated(message);
         
         return convertToDTO(message);

@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.example.chatapp.enums.ChannelType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -19,7 +20,8 @@ public class Channel {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "server_id") // DM kanalları için null olabilir
+    @JoinColumn(name = "server_id") 
+    @JsonIgnore 
     private Server server;
 
     @Column(nullable = false)
@@ -36,5 +38,6 @@ public class Channel {
     // --- İlişkiler ---
 
     @OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Message> messages;
 }
