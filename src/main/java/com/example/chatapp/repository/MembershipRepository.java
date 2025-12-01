@@ -20,4 +20,6 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
     List<Membership> findByServer(Server server);
     
     boolean existsByUserAndServer(User user, Server server);
+    
+    boolean existsByUserIdAndServerId(UUID userId, UUID serverId);
 }

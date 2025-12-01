@@ -49,10 +49,11 @@ public class AuthController {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
             String token = jwtUtil.generateToken(user);
-            return ResponseEntity.ok(new AuthenticationResponse(token));
+            UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getAvatarUrl());
+            return ResponseEntity.ok(new AuthenticationResponse(token, userDTO));
 
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(401).body(null);
         }
     }
 

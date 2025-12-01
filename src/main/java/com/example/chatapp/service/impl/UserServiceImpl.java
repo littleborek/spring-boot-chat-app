@@ -2,6 +2,7 @@
 package com.example.chatapp.service.impl;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.ArrayList;
 
 
@@ -51,10 +52,48 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+    
+    @Override
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
+    }
 
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+    
+    @Override
+    public User updateAvatar(UUID userId, String avatarUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        user.setAvatarUrl(avatarUrl);
+        return userRepository.save(user);
+    }
+    
+    @Override
+    public User updateProfile(UUID userId, String username, String avatarUrl, String profileMeta) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Check if new username is already taken by another user
+        if (username != null && !username.equals(user.getUsername())) {
+            if (userRepository.findByUsername(username).isPresent()) {
+                throw new RuntimeException("Username already taken");
+            }
+            user.setUsername(username);
+        }
+        
+        if (avatarUrl != null) {
+            user.setAvatarUrl(avatarUrl);
+        }
+        
+        if (profileMeta != null) {
+            user.setProfileMeta(profileMeta);
+        }
+        
+        return userRepository.save(user);
     }
 
     @Override

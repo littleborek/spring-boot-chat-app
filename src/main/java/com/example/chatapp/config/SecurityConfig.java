@@ -53,6 +53,7 @@ public class SecurityConfig {
                     "/configuration/**",
                     "/webjars/**",
                     "/api/test/**",
+                    "/ws/**",
                     "/error"
                 ).permitAll()
                 .anyRequest().authenticated()
@@ -67,8 +68,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200")); // Angular port
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedOriginPatterns(List.of("*")); // Allow all origins for development
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
